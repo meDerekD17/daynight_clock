@@ -1,0 +1,36 @@
+name: digital_clock
+description: Digital clock.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: "^0.16.0"
+  cupertino_icons: ^0.1.2
+  light: ^0.1.1
+  flutter_launcher_icons: "^0.7.0"
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  image_path: "assets/daynight_icon.png"
+  android: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  fonts:
+    - family: Teko
+      fonts:
+        - asset: third_party/Teko-Regular.ttf
+          weight: 400
+        - asset: third_party/Teko-SemiBold.ttf
+          weight: 600
+
