@@ -44,7 +44,7 @@ class ClockModel extends ChangeNotifier {
   /// When light sensor reading goes below Min, change to NightTime Clock BUT..
   /// .. have to go up to MAX before Clock changes back to Day Time Mode
   get lightSensorMax => _lightSensorMax;
-  int _lightSensorMax = 10;
+  int _lightSensorMax = 8;
   set lightSensorMax(int lightSensorMax) {
     if (lightSensorMax != _lightSensorMax) { //if a change was made
       _lightSensorMax = lightSensorMax;

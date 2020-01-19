@@ -133,7 +133,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {  //with TickerProvi
                           (String lightSensorMax) {
                         setState(() {
                           var test = int.tryParse(lightSensorMax); // gets int or null
-                          _model.lightSensorMax = test != null ? test: 10;
+                          _model.lightSensorMax = test != null ? test: 8;
                         });
                       }),
 

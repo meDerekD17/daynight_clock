@@ -15,6 +15,17 @@ import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
 // A Day Night clock. Written for submission to Flutter Clock Challenge
+//Light sensor (only available Android devices) will automatically switch between
+//Day and Night clock depending on light. A 24-hour display format can be set.
+//
+//Can be set to not automatically change with Light changes.
+//Can change minimum and maximum Light values on which to change.
+//Was tested on AVD Nexus S API 27 480 x 800 and
+// device Blackberry Priv STV100 3 (2560x1440 - close to 5/3 size ratio)
+//
+//I dont quite understand what 'Flutter stable channel' means, but I did do
+//upgrades to Dart, Flutter and Android Studio before starting this project
+// Derek Davidson  January 2020    mederekd AT gmail DOT com
 class DaynightClock extends StatefulWidget {
   const DaynightClock(this.model);
 
@@ -276,8 +287,8 @@ class _DaynightClockState extends State<DaynightClock>
     String strMinute =
         DateFormat('mm').format(_dateTime); //must return eg 04 for 4 minutes
     String strSecond = DateFormat('ss').format(_dateTime);
-    int intHour = int.parse(strHour); //correct form for Hour(24Hour or not)
-      //  _dateTime.hour; //will be 0-23 ie 24-hour format
+    int intHour = int.parse(strHour); //correct number for current Hour Format
+      //  _dateTime.hour; //always 0-23 ie 24-hour format
     int intMinute = _dateTime
         .minute; //used to see ig in 59th or 1st minute for hr,min digit animation
     int intSecond = _dateTime
@@ -287,10 +298,10 @@ class _DaynightClockState extends State<DaynightClock>
     String strHrRightDigit = strHour.substring(1, 2);
     String strMinLeftDigit = strMinute.substring(0, 1);
     String strMinRightDigit = strMinute.substring(1, 2);
-    String strSecleftDigit = strSecond.substring(0, 1);
+    String strSecLeftDigit = strSecond.substring(0, 1);
     String strSecRightDigit = strSecond.substring(1, 2);
 
-    int intSecLeftDigit = int.parse(strSecleftDigit);
+    int intSecLeftDigit = int.parse(strSecLeftDigit);
     int intSecRightDigit = int.parse(strSecRightDigit);
     int intMinLeftDigit = int.parse(strMinLeftDigit);
     int intMinRightDigit = int.parse(strMinRightDigit);
@@ -331,7 +342,7 @@ class _DaynightClockState extends State<DaynightClock>
       }
 
       //maybe could do these IFs a bit different, so did not have to do IFs below if not
-      //in the rotating parts of the seconds
+      //in the rotating parts of the seconds. Do in Phase 2.
 
       //we are in seconds = 59 or seconds = 0, with angleToRotate set to correct
       // value, or set to 0.0, if not in rotating part of the second
@@ -381,15 +392,13 @@ class _DaynightClockState extends State<DaynightClock>
       ourStack.add(myRotateAboutY(
           //most of time angle to rotate is zero
           width * (intHrLeftDigit == 1 ? 0.075 : 0.045),
-
-          ///0.066),   //1 ? 0.075 : 0.045
           height * 0.05,
           (bHrLeftDigRotates ? angleToRotate : 0.0),
           strHrLeftDigit));
     }
 
     ourStack.add(myRotateAboutY(
-        width * 0.215, //0.1875
+        width * 0.215,
         height * 0.05,
         (bHrRightDigRotates ? angleToRotate : 0.0),
         strHrRightDigit));
@@ -484,7 +493,6 @@ class _DaynightClockState extends State<DaynightClock>
                   ),
                   borderRadius: BorderRadius.circular(ballDimension), //20.0),
                 ),
-                // color: Colors.red,)
               ),
             ),
           ),
@@ -502,8 +510,8 @@ class _DaynightClockState extends State<DaynightClock>
             left: width * (0.88 - (0.06 * 0.5 * (animController.value - 0.5))),
             top: height * 0.684,
             child: SizedBox(
-              width: ballDimension, //width* 0.025,
-              height: ballDimension, //width* 0.025,
+              width: ballDimension,
+              height: ballDimension,
               child: Container(
                 decoration: BoxDecoration(
                   color: Color(0xFFBA2C0F),
@@ -530,7 +538,6 @@ class _DaynightClockState extends State<DaynightClock>
         ourStack.add(
           Positioned(
             left: width * 0.88,
-            //86,
             top:
                 height * 0.684 - (((i - 1) * (ballDimension + ballSeparation))),
             child: SizedBox(
@@ -699,7 +706,6 @@ class _DaynightClockState extends State<DaynightClock>
           ),
         );
       } //loop to draw collapsing digits
-
     } // else right digit is zero
 
     if (!widget.model.is24HourFormat) {
@@ -794,7 +800,6 @@ class _DaynightClockState extends State<DaynightClock>
     if (!widget.model.is24HourFormat) {
       //if not 24-hour format, we need Am or PM
       int intHour24 = int.parse(DateFormat('HH').format(_dateTime));
-      //int intHour24 = int.parse(DateFormat('HH').format(DateTime.now()));
       ourStack.add(
         Positioned(
             left: width * 0.85, //45, //0.84,
