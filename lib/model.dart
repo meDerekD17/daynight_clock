@@ -13,6 +13,13 @@ import 'package:flutter/material.dart';
 ///
 /// Contestants: Do not edit this.  << But I want  to use some settings??
 ///
+/// Settings:
+///  1. Option to show clock time as 24-hour format
+///  2. Use the Light Sensor (not available on iOS) to determine to show either Day or Night Clock
+///     a. Set Light Sensor Max value, above which Clock will change to Day Clock (if so permitted)
+///     b. Set Light Sensor Min value, below which Clock will change to Night Clock (if so permitted)
+///  3. Set Day or Night Clock. If Light Sensor is allowed to set Clock, the Light Sensor may change back!
+///
 /// saving and getting settings to/from SharedPreferences should be part of Phase 2
 class ClockModel extends ChangeNotifier {
   get is24HourFormat => _is24HourFormat;

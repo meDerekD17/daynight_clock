@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; //for set pref orientation
-//import 'dart:async';  //for Timer
 
 import 'model.dart';
 
@@ -165,14 +164,6 @@ class _ClockCustomizerState extends State<ClockCustomizer> {  //with TickerProvi
                       _model.is24HourFormat = value;
                     });
                   }),
-
-//                  _enumMenu('Theme', _themeMode, // dark light theme
-//                      ThemeMode.values.toList()..remove(ThemeMode.system),
-//                          (ThemeMode mode) {
-//                        setState(() {
-//                          _themeMode = mode;
-//                        });
-//                      }),
                 ],
               ),
             ),
@@ -214,15 +205,12 @@ class _ClockCustomizerState extends State<ClockCustomizer> {  //with TickerProvi
 
       // this appears to be the main.or 1st, window screen shown
       return MaterialApp(
-//        theme: ThemeData.light(),
-//        darkTheme: ThemeData.dark(),
-//        themeMode: _themeMode,
         debugShowCheckedModeBanner: false, //false, does debug banner show when make changes?
 
         home: Scaffold(
           resizeToAvoidBottomPadding: false, // i tried true, but no difference dd
           endDrawer: _configDrawer(context),
-          body: Container(    //SafeArea( //so can get whole screen
+          body: Container(    //SafeArea( //Changed so can get whole screen
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

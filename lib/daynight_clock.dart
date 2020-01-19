@@ -12,10 +12,9 @@ import 'package:flutter/widgets.dart'; // for mediaQuery to get screen size
 import 'model.dart';
 import 'package:light/light.dart'; //light sensor
 import 'package:intl/intl.dart';
-import 'package:vector_math/vector_math_64.dart' show radians;
 import 'dart:math' as math;
 
-/// A Day Night clock.
+// A Day Night clock. Written for submission to Flutter Clock Challenge
 class DaynightClock extends StatefulWidget {
   const DaynightClock(this.model);
 
@@ -35,31 +34,14 @@ class _DaynightClockState extends State<DaynightClock>
   int lightSensorValue; // save current light sensor value
   StreamSubscription<int>
       _lightSensorSubscription; //..works for Android.. NOT FOR IOS <<<
-  Light _light; //..only
-  //bool didLightChange =
-  //false; //not needed as tests if eg Day, and below light level, so change
+  Light _light;
 
-  //var animatedOpacity = 0.0; //presume double
-  //var changingAngle = -math.pi / 2.0;
-  //var changingAngle2 = 0.0;
-
-  //var angleDelta = math.pi / 16.0; // = math.pi/2.0;
-
-  //int animationNumber;
   AnimationController animController;
 
   MyClockType previousClockType;
-  //bool isClockSetBySensor = true;  //should be in the model????
 
   double globalFontSize;
-  //final
-  TextStyle defaultStyle; // = TextStyle(
-//    color: Color(0xFF38332D),
-//    fontFamily: 'Teko',
-//    fontWeight: FontWeight.w400,
-//    //fontSize: globalFontSize * 0.5,
-//    height: 1.35, //pushes digit up (and down) within 'text area'
-//  );
+  TextStyle defaultStyle;
 
   //There are 2 background Images, one for each clock type: Day or Night
   //Current image is loaded from assets in _updateModel() (and initState())
@@ -71,13 +53,11 @@ class _DaynightClockState extends State<DaynightClock>
 
     previousClockType = widget.model.myClockType;
 
-    //strBackgroundFile = 'assets/daynight_day.png';
-
     //Default start Clock Type is Day. After here, is changed as needed in _updateModel()
     backgroundImage = Image.asset('assets/daynight_day.png', fit: BoxFit.fill);
 
     if (widget.model.myClockType == MyClockType.Day) {
-      //Don't need to check as Day is default start
+      //Don't really eed to check as Day is default start
       //Clock Type using animationController ..
       startAnimController();
     } //if Day Clock, start animation
@@ -101,14 +81,13 @@ class _DaynightClockState extends State<DaynightClock>
       color: Color(0xFF38332D),
       fontFamily: 'Teko',
       fontWeight: FontWeight.w400,
-      //fontSize: globalFontSize * 0.5, //fontSize set when written
       height: 1.35, //pushes digit up (and down) within 'text area'
-    );
-    _updateModel(); //..as _updateModel() calls _updateTime()
+    );//Default for Clock Digits. Size set in build() where screen dimensions are known
+    _updateModel(); //Note: _updateModel() calls _updateTime()
   } // void initState()
 
   void startAnimController() {
-    //animController?.dispose();  //maybe if removes, and use SingleTicker
+    //start the animationController for Day clock, at 1 second duration
     stopAnimationController();
     animController = new AnimationController(
       duration: Duration(milliseconds: 1000),
@@ -173,11 +152,6 @@ class _DaynightClockState extends State<DaynightClock>
   } //bool didLightChangeEnough(
 
   void _updateModel() {
-    // need to reset SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom])
-    // if model change used a keyboard
-    // above line to remove System Bar did not work if no text was changed, so..
-    // ..had to place in Build()
-
     if (previousClockType != widget.model.myClockType) {
       //is there a Clock Type change
       if (previousClockType == MyClockType.Day) {
@@ -207,9 +181,9 @@ class _DaynightClockState extends State<DaynightClock>
       _dateTime = DateTime.now();
 
       //DayClock needs animation between the Timer setting of 1 second, to allow
-      //the juggling balls to collapse and mover over when carrying to the
+      //the juggling balls to collapse and move over when carrying to the
       //digit to the left
-      // Night Clock just comes back in 1 minute with the Timer
+      // Night Clock comes back in 1 minute with the Timer - very basic, allows owner to sleep
 
       //check if lightSensor Can Change Clock, and, if so, check value of lux to set Day or Night Clock
       if (widget.model.lightSensorCanSetClockType) {
@@ -260,37 +234,16 @@ class _DaynightClockState extends State<DaynightClock>
     List<Widget> stackChildren =
         []; //images and overlays to display on the screen
 
-//    final hour =
-//        DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
-//    final minute =
-//        DateFormat('mm').format(_dateTime); // WILL NOT BE USED ..<<<<<<
-//    final second = DateFormat('ss').format(_dateTime); //dd 1221
-//    final millisecond = _dateTime.millisecond; //   <<<<<<<<<<<<<<<<
-
     //remove system bar if editText keyboard left it showing. There must be a more efficient..
-    //of doing this. I tried in updateModel() , but that would not work if no..
-    //change was made to the EditText field
+    //way of doing this. I tried in updateModel() , but that would not work if no..
+    //change was made to the EditText field. To be solved in Phase 2.
     SystemChrome.restoreSystemUIOverlays();
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double width = _mediaQueryData.size.width;
     double height = _mediaQueryData.size.height;
 
-    // ***** Will use global Font and size when the best font and size is determined. Fonts for
-    // other size text will be relative to gloablFontSize
-    globalFontSize = width * 0.46; //was /.5  //used my hour minute digits
-
-    //Made Class global defined in initState(), but changed by Build() because screen dimensions
-
-//    final defaultStyle = TextStyle(
-//      color: Color(0xFF38332D),
-//      fontFamily: 'Teko',
-//      fontWeight: FontWeight.w400,
-//      fontSize: globalFontSize * 0.5,
-//      height: 1.35, //pushes digit up (and down) within 'text area'
-//    );
-
-    ///    defaultStyle.fontSize=globalFontSize;
+    globalFontSize = width * 0.46;
 
     stackChildren.add(Positioned(
       left: 0.0,
@@ -300,8 +253,6 @@ class _DaynightClockState extends State<DaynightClock>
       child: backgroundImage,
     ));
 
-    // DATETIME IS ONLY VALID WITH TIMER = 1 SECOND, not eg 54 sec, or 4 seconds
-    //widget.model.
     if (widget.model.myClockType == MyClockType.Day) {
       addStackForDayClock(stackChildren, width, height);
     } else if (widget.model.myClockType == MyClockType.Night) {
@@ -325,8 +276,8 @@ class _DaynightClockState extends State<DaynightClock>
     String strMinute =
         DateFormat('mm').format(_dateTime); //must return eg 04 for 4 minutes
     String strSecond = DateFormat('ss').format(_dateTime);
-    int intHour =
-        _dateTime.hour; //used to check if either of hour digits should animate
+    int intHour = int.parse(strHour); //correct form for Hour(24Hour or not)
+      //  _dateTime.hour; //will be 0-23 ie 24-hour format
     int intMinute = _dateTime
         .minute; //used to see ig in 59th or 1st minute for hr,min digit animation
     int intSecond = _dateTime
@@ -344,11 +295,6 @@ class _DaynightClockState extends State<DaynightClock>
     int intMinLeftDigit = int.parse(strMinLeftDigit);
     int intMinRightDigit = int.parse(strMinRightDigit);
     int intHrLeftDigit = int.parse(strHrLeftDigit);
-    //int intHrRightDigit = int.parse(strHrRightDigit);
-
-//    int iStartLoop = 0; //to give repeat draws of digits to give thickness in..
-//    int iEndLoop = 0; //..the digits as they turn
-//    int iLoopStep = 0;
 
     double angleToRotate = 0.0;
 
@@ -395,6 +341,7 @@ class _DaynightClockState extends State<DaynightClock>
       if ((bIn59thSecondOfMinute && intMinRightDigit == 9) ||
           (bIn1stSecondOfMinute && intMinRightDigit == 0)) {
         bMinLeftDigRotates = true;
+
         if (bIn59thSecondOfMinute && intMinute == 59 ||
             bIn1stSecondOfMinute && intMinute == 0) {
           bHrRightDigRotates = true;
@@ -423,7 +370,6 @@ class _DaynightClockState extends State<DaynightClock>
 
             bHrLeftDigRotates = true;
           } // if Hour left digit rotates
-          // **********************   /
         } //if Hour right digit rotates
 
       } //if Minute Left digit changes
@@ -449,7 +395,7 @@ class _DaynightClockState extends State<DaynightClock>
         strHrRightDigit));
 
     ourStack.add(myRotateAboutY(
-        width * (intMinLeftDigit == 1 ? 0.47 : 0.44), //* 0.44,
+        width * (intMinLeftDigit == 1 ? 0.47 : 0.44),
         height * 0.05,
         (bMinLeftDigRotates ? angleToRotate : 0.0),
         strMinLeftDigit));
@@ -458,7 +404,7 @@ class _DaynightClockState extends State<DaynightClock>
         width *
             (intMinRightDigit == 1
                 ? 0.625
-                : 0.61), //if 1, put it in centre // 0.615 :0.585 //0.595),
+                : 0.61),
         height * 0.05,
         (bMinRightDigRotates ? angleToRotate : 0.0),
         strMinRightDigit));
@@ -627,13 +573,6 @@ class _DaynightClockState extends State<DaynightClock>
               height: ballDimension,
               child: Container(
                 decoration: BoxDecoration(
-//                  color: Color(0xFFBA2C0F), //our red
-//                  border: Border.all(
-//                    color: Color(0xFFBA2C0F), //our red
-//                    width: 1,
-//                  ),
-
-                  //        //*
                   color: Color.fromRGBO(
                       186,
                       044,
@@ -726,7 +665,6 @@ class _DaynightClockState extends State<DaynightClock>
           ),
         );
       } //carry over starting at end of right digit =9
-
     } // if sec Left digit IS NOT zero == ie do not draw a zeroth ten digit
 
     else if (intSecRightDigit ==
@@ -815,29 +753,13 @@ class _DaynightClockState extends State<DaynightClock>
     //
     //Global to class variable _dateTime is used to give Hour, Minute
 
-    //_dateTime = DateTime.now(); //as can get here directfrom build() and animation ,ie not
-    // through updateTime()
     String strHour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     String strMinute = DateFormat('mm').format(_dateTime);
-    String strSecond = DateFormat('ss').format(_dateTime);
-//    int intHour = _dateTime.hour;
-//    int intMinute = _dateTime.minute;
-//    int intSecond = _dateTime.second;
 
     String strHrleftDigit = strHour.substring(0, 1);
     String strHrRightDigit = strHour.substring(1, 2);
-//    String strMinleftDigit = strMinute.substring(0, 1);
-//    String strMinRightDigit = strMinute.substring(1, 2);
-//    String strSecleftDigit = strSecond.substring(0, 1);
-//    String strSecRightDigit = strSecond.substring(1, 2);
-
-//    int intSecLeftDigit = int.parse(strSecleftDigit);
-//    int intSecRightDigit = int.parse(strSecRightDigit);
-//    int intMinLeftDigit = int.parse(strMinleftDigit);
-//    int intMinRightDigit = int.parse(strMinRightDigit);
     int intHrLeftDigit = int.parse(strHrleftDigit);
-//    int intHrRightDigit = int.parse(strHrRightDigit);
 
     ourStack.add(
       Positioned(

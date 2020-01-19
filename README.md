@@ -7,3 +7,8 @@ A Clock App. Created for the [Flutter Clock Challenge](https://flutter.dev/clock
 ```
 flutter run
 ```
+
+## Notes
+
+- Run on Anfroid device
+- Screen size 800w x 480h 5/3 ratio
