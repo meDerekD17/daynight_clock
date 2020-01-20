@@ -33,16 +33,7 @@ void main() {  //Future main() async {       // was: void main() { //, so can se
   // Your job is to edit [DigitalClock], or replace it with your
   // own clock widget. (Look in digital_clock.dart for more details!)
 
-  //await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
-  //runApp(ClockCustomizer((ClockModel model) => DigitalClock(model)));
-  //WidgetsFlutterBinding.ensureInitialized();
-  //await SystemChrome.setPreferredOrientations(
-    //  [DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
-  //    .then((_) {
     runApp(ClockCustomizer((ClockModel model) => DaynightClock(model)));
-  //});
-
-
 }
 
 

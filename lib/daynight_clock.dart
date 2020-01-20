@@ -23,8 +23,6 @@ import 'dart:math' as math;
 //Was tested on AVD Nexus S API 27 480 x 800 and
 // device Blackberry Priv STV100 3 (2560x1440 - close to 5/3 size ratio)
 //
-//I dont quite understand what 'Flutter stable channel' means, but I did do
-//upgrades to Dart, Flutter and Android Studio before starting this project
 // Derek Davidson  January 2020    mederekd AT gmail DOT com
 class DaynightClock extends StatefulWidget {
   const DaynightClock(this.model);
@@ -37,8 +35,6 @@ class DaynightClock extends StatefulWidget {
 
 class _DaynightClockState extends State<DaynightClock>
     with TickerProviderStateMixin {
-  //[Single]TickerProviderStateMixin - for single or multiple animationControllers
-  //Gave problems when tried SingleTickerProviderStateMixin. Even with stopAnimationController()
   DateTime _dateTime = DateTime.now();
   Timer _timer;
 
