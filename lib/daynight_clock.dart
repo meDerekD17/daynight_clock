@@ -6,7 +6,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; //for set pref orientation
+import 'package:flutter/services.dart'; //for set pref orientation & SystemChannels.lifecycle
 
 import 'package:flutter/widgets.dart'; // for mediaQuery to get screen size
 import 'model.dart';
@@ -93,6 +93,10 @@ class _DaynightClockState extends State<DaynightClock>
       _lightSensorSubscription?.cancel();
     }
 
+    //handle LifeCycle changes, specifically: resume, so NightClock gets current
+    handleAppLifecycleState();  //time (Timer of 1 minute does not Time when suspended??
+
+
     defaultStyle = TextStyle(
       color: Color(0xFF38332D),
       fontFamily: 'Teko',
@@ -101,6 +105,15 @@ class _DaynightClockState extends State<DaynightClock>
     ); //Default for Clock Digits. Size set in build() where screen dimensions are known
     _updateModel(); //Note: _updateModel() calls _updateTime()
   } // void initState()
+
+  handleAppLifecycleState(){
+    SystemChannels.lifecycle.setMessageHandler((msg) {
+      if(msg == AppLifecycleState.resumed.toString()) {
+        _updateTime(); //so setState() is called to set the current time
+      }
+      return;
+     });
+  }
 
   void startAnimationController(bool bIsDayClock) {
     //start the animationController for Day clock, at 1 second duration
@@ -745,6 +758,7 @@ class _DaynightClockState extends State<DaynightClock>
       } //loop to draw collapsing digits
     } // else right digit is zero
 
+    //looks to be same as in NightClock. Look into placing this in build() - Phase 2
     if (!widget.model.is24HourFormat) {
       //we need Am or PM
       int intHour24 = int.parse(DateFormat('HH').format(DateTime.now()));
@@ -969,6 +983,7 @@ class _DaynightClockState extends State<DaynightClock>
       );
     } //if else on animationController.value to position hour and minute text
 
+    //same as in DayClock - both could be moved back to build() to reduce space
     if (!widget.model.is24HourFormat) {
       //if not 24-hour format, we need Am or PM
       int intHour24 = int.parse(DateFormat('HH').format(_dateTime));
